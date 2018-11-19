@@ -38,7 +38,6 @@ NAN_METHOD(Open) {
     Nan::ThrowTypeError("First argument must be a string");
     return;
   }
-  v8::String::Utf8Value path(Nan::To<v8::String>(info[0]).ToLocalChecked());
 
   // options
   if (!info[1]->IsObject()) {
@@ -54,7 +53,7 @@ NAN_METHOD(Open) {
   }
 
   OpenBaton* baton = new OpenBaton();
-  snprintf(baton->path, sizeof(baton->path), "%s", *path);
+  snprintf(baton->path, sizeof(baton->path), "COM%d", getIntFromObject(options, "comPort"));
   baton->baudRate = getIntFromObject(options, "baudRate");
   baton->dataBits = getIntFromObject(options, "dataBits");
   baton->parity = ToParityEnum(getStringFromObj(options, "parity"));
